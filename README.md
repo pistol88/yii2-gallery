@@ -22,6 +22,12 @@ php composer require pistol88/yii2-gallery "*"
 php composer update
 ```
 
+Миграция от CostaRico/yii2-images
+
+```
+php yii migrate/up --migrationPath=@vendor/costa-rico/yii2-images/migrations
+```
+
 Подключение и настройка
 ---------------------------------
 В конфигурационный файл приложения добавить модуль yii2images
