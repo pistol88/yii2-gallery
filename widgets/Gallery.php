@@ -24,7 +24,7 @@ class Gallery extends \yii\base\Widget
     {
         if($this->mode == 'single') {
             if($image = $this->model->getImage()->getUrl($this->previewSize)) {
-                $img = Html::img($image, ['width' => '50']);
+                $img = Html::img($image, ['width' => current(explode('x', $this->previewSize))]);
             } else {
                 $img = '';
             }

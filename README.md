@@ -49,12 +49,13 @@ php yii migrate/up --migrationPath=@vendor/costa-rico/yii2-images/migrations
 К модели, к которой необходимо аттачить загружаемые картинки, добавляем поведение:
 
 ```php
-    function behaviors() {
+    function behaviors()
+    {
         return [
             'images' => [
                 'class' => 'pistol88\gallery\behaviors\AttachImages',
                 'inAttribute' => 'image',
-                'sizes' = ['thumb' => '50x50', 'medium' => '300x300', 'big' => '500x500'],
+                'sizes' => ['thumb' => '50x50', 'medium' => '300x300', 'big' => '500x500'],
             ],
         ];
     }
@@ -101,3 +102,5 @@ foreach($model->getThumbs('thumb') as $image) {
 * inAttribute - название поля таблицы, связанной с $model, где необходимо хранить кеш превьюшек
 * mode - тип загрузки. gallery - массовая загрузка, single - одиночное поле.
 * previewSize - размер превьюшки рядом с полем, по умолчанию '50x50'
+
+Внимание! Христа ради, не забудьте добавить ['options' => ['enctype' => 'multipart/form-data']] для вашей формы.

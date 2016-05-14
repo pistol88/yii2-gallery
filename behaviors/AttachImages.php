@@ -54,8 +54,10 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
     {
 		$this->doResetImages = false;
 		$images = [];
+
 		foreach($this->owner->getImages() as $image) {
             $size = ['image' => $image->getUrl()];
+            
             
             foreach($this->sizes as $name => $wh) {
                 $size[$name] = $image->getUrl($wh);
