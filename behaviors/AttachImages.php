@@ -63,8 +63,9 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
             
             $images[] = $size;
 		}
+        
 		$this->owner->{$this->inAttribute} = serialize($images);
-		$this->owner->save();
+		$this->owner->save(false);
         
         return $this;
     }

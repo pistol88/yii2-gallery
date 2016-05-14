@@ -54,6 +54,9 @@ php composer update
     }
 ```
 
+*inAttribute - название поля модели, где будет храниться PHP serialize (кеш превьюшек), рекомендую типа text
+*sizes - перечень размеров, которые будут кешироваться в inAttribute
+
 Использование
 ---------------------------------
 Использовать можно также, как напрямую из [CostaRico/yii2-images](https://github.com/CostaRico/yii2-images)
