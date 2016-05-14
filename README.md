@@ -60,7 +60,7 @@ php composer update
 
 ```php
 $images = $model->getImages();
-foreach($images as $img){
+foreach($images as $img) {
     //retun url to full image
     echo $img->getUrl();
 
