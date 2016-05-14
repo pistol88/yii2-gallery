@@ -1,0 +1,27 @@
+.pistol88-gallery {
+    list-style-type:none; 
+    margin-left: -45px;
+}
+
+.pistol88-gallery li{
+    list-style: none;
+    float: left;
+    width: 130px;
+    height: 120px;
+    overflow: hidden;
+    padding: 3px;
+    margin: 3px;
+    border: 2px solid #333;
+    position: relative;
+}
+
+.pistol88-gallery li.main {
+    border: 2px solid red;
+}
+
+.pistol88-gallery li a.delete {
+    position: absolute;
+    right: 1px;
+    top: 0px;
+    color: red;
+}
