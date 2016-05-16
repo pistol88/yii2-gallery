@@ -54,17 +54,26 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
     {
 		$this->doResetImages = false;
 		$images = [];
-
+        $image = false;
+        $haveMain = false;
+        
 		foreach($this->owner->getImages() as $image) {
+            if($image->isMain) {
+                $haveMain = true;
+            }
+            
             $size = ['image' => $image->getUrl()];
-            
-            
+
             foreach($this->sizes as $name => $wh) {
                 $size[$name] = $image->getUrl($wh);
             }
             
             $images[] = $size;
 		}
+        
+        if(!$haveMain) {
+            $image->setMain(true)->save();
+        }
         
 		$this->owner->{$this->inAttribute} = serialize($images);
 		$this->owner->save(false);
