@@ -71,7 +71,7 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
             $images[] = $size;
 		}
         
-        if(!$haveMain) {
+        if(!$haveMain && !$image instanceof \rico\yii2images\models\PlaceHolder) {
             $image->setMain(true)->save();
         }
         
