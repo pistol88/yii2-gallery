@@ -106,12 +106,12 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
             return null;
         }
         
+        $image = $this->owner->getImage();
+        if($image instanceof \rico\yii2images\models\PlaceHolder) {
+            return false;
+        }
+        
         if($size == 'full') {
-            $image = $this->owner->getImage();
-            if($image instanceof \rico\yii2images\models\PlaceHolder) {
-                return false;
-            }
-            
             return $image->getUrl();
         }
         
