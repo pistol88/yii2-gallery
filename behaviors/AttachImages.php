@@ -13,8 +13,8 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
     public $webUploadsPath = '/uploads';
     public $allowExtensions = ['jpg', 'jpeg', 'png', 'gif'];
     public $sizes = ['thumb' => '50x50', 'preview' => '100x100', 'medium' => '300x300', 'big' => '500x500'];
-	public $doResetImages = true; 
-	
+    private $doResetImages = true; 
+    
     public function init()
     {
         if (empty($this->uploadsPath)) {
@@ -44,20 +44,20 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
                 }
             }
 
-			$this->reSetImages();
-		}
+            $this->reSetImages();
+        }
         
         return $this;
     }
 
     public function reSetImages()
     {
-		$this->doResetImages = false;
-		$images = [];
+        $this->doResetImages = false;
+        $images = [];
         $image = false;
         $haveMain = false;
         
-		foreach($this->owner->getImages() as $image) {
+        foreach($this->owner->getImages() as $image) {
             if($image->isMain) {
                 $haveMain = true;
             }
@@ -69,14 +69,15 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
             }
             
             $images[] = $size;
-		}
-        
-        if(!$haveMain && !$image instanceof \rico\yii2images\models\PlaceHolder) {
-            $image->setMain(true)->save();
         }
         
-		$this->owner->{$this->inAttribute} = serialize($images);
-		$this->owner->save(false);
+        if(!$haveMain && $image && !$image instanceof \rico\yii2images\models\PlaceHolder) {
+            $image->setMain(true);
+            $image->save();
+        }
+        
+        $this->owner->{$this->inAttribute} = serialize($images);
+        $this->owner->save(false);
         
         return $this;
     }
