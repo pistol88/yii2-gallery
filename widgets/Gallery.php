@@ -11,8 +11,8 @@ class Gallery extends \yii\base\Widget
 {
     public $model = null;
     public $form = null;
-    public $inAttribute = 'images';
     public $mode = 'gallery';
+    public $inAttribute = 'images';
     public $previewSize = '50x50';
 
     public function init()
@@ -22,7 +22,7 @@ class Gallery extends \yii\base\Widget
 
     public function run()
     {
-        if($this->mode == 'single') {
+        if($this->model->getGalleryMode() == 'single') {
             if($image = $this->model->getImage()->getUrl($this->previewSize)) {
                 $img = Html::img($image, ['width' => current(explode('x', $this->previewSize))]);
             } else {

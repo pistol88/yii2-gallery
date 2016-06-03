@@ -56,6 +56,7 @@ php yii migrate/up --migrationPath=@vendor/costa-rico/yii2-images/migrations
                 'class' => 'pistol88\gallery\behaviors\AttachImages',
                 'inAttribute' => 'image',
                 'sizes' => ['thumb' => '50x50', 'medium' => '300x300', 'big' => '500x500'],
+                'mode' => 'gallery',
             ],
         ];
     }
@@ -63,6 +64,7 @@ php yii migrate/up --migrationPath=@vendor/costa-rico/yii2-images/migrations
 
 *inAttribute - название поля модели, где будет храниться PHP serialize (кеш превьюшек), рекомендую типа text
 *sizes - перечень размеров, которые будут кешироваться в inAttribute
+*mode - тип загрузки. gallery - массовая загрузка, single - одиночное поле.
 
 Использование
 ---------------------------------
@@ -100,7 +102,6 @@ foreach($model->getThumbs('thumb') as $image) {
 <?=\pistol88\gallery\widgets\Gallery::widget(['model' => $model, 'form' => $form, 'inAttribute' => 'image']); ?>
 
 * inAttribute - название поля таблицы, связанной с $model, где необходимо хранить кеш превьюшек
-* mode - тип загрузки. gallery - массовая загрузка, single - одиночное поле.
 * previewSize - размер превьюшки рядом с полем, по умолчанию '50x50'
 
 Внимание! Христа ради, не забудьте добавить ['options' => ['enctype' => 'multipart/form-data']] для вашей формы.
