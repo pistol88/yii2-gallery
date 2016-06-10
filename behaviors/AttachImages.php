@@ -32,7 +32,8 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
         ];
     }
     
-    public function getGalleryMode() {
+    public function getGalleryMode()
+    {
         return $this->mode;
     }
     

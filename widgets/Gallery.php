@@ -12,11 +12,15 @@ class Gallery extends \yii\base\Widget
     public $model = null;
     public $form = null;
     public $mode = 'gallery';
-    public $inAttribute = 'images';
+    public $inAttribute = null;
     public $previewSize = '50x50';
 
     public function init()
     {
+        if(empty($this->inAttribute)) {
+            $this->inAttribute = $this->model->inAttribute;
+        }
+        
         \pistol88\gallery\assets\GalleryAsset::register($this->getView());
     }
 
