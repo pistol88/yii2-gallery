@@ -10,10 +10,12 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
 {
     public $inAttribute = 'images';
     public $uploadsPath = '';
+    public $mode = 'gallery';
     public $webUploadsPath = '/uploads';
     public $allowExtensions = ['jpg', 'jpeg', 'png', 'gif'];
     public $sizes = ['thumb' => '50x50', 'preview' => '100x100', 'medium' => '300x300', 'big' => '500x500'];
     private $doResetImages = true; 
+    private $lastUploadedImage = false;
     
     public function init()
     {
@@ -30,6 +32,11 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
         ];
     }
     
+    public function getGalleryMode()
+    {
+        return $this->mode;
+    }
+    
     public function setImages($event)
     {
         if($this->doResetImages) {
@@ -39,7 +46,13 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
                 foreach ($userImages as $file) {
                     if(in_array(strtolower($file->extension), $this->allowExtensions)) {
                         $file->saveAs("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
+                        if($this->owner->getGalleryMode() == 'single') {
+                            foreach($this->owner->getImages() as $image) {
+                                $image->delete();
+                            }
+                        }
                         $attach = $this->owner->attachImage("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
+                        $this->lastUploadedImage = $attach;
                     }
                 }
             }
@@ -56,7 +69,7 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
         $images = [];
         $image = false;
         $haveMain = false;
-        
+
         foreach($this->owner->getImages() as $image) {
             if($image->isMain) {
                 $haveMain = true;
@@ -70,8 +83,12 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
             
             $images[] = $size;
         }
-        
-        if(!$haveMain && $image && !$image instanceof \rico\yii2images\models\PlaceHolder) {
+
+        if($this->owner->getGalleryMode() == 'single' && $this->lastUploadedImage) {
+            $haveMain = true;
+            $this->lastUploadedImage->setMain(true);
+            $this->lastUploadedImage->save();
+        } elseif(!$haveMain && $image && !$image instanceof \rico\yii2images\models\PlaceHolder) {
             $image->setMain(true);
             $image->save();
         }
