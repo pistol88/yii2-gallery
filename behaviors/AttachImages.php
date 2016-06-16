@@ -126,12 +126,12 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
         }
     }
     
-    public function getThumb($size = 'full')
+    public function getThumb($size = 'image')
     {
         if(empty($this->owner->{$this->inAttribute})) {
             return null;
         }
-        
+
         if($images = @unserialize($this->owner->{$this->inAttribute})) {
             $image = current($images);
             return $image[$size];
