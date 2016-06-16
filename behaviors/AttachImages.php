@@ -117,13 +117,28 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
         return $return;
     }
     
+    public function hasImage()
+    {
+        if($this->getImage() instanceof \rico\yii2images\models\PlaceHolder) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
     public function getThumb($size = 'full')
     {
         if(empty($this->owner->{$this->inAttribute})) {
             return null;
         }
         
+        if($images = @unserialize($this->owner->{$this->inAttribute})) {
+            $image = current($images);
+            return $image[$size];
+        }
+        
         $image = $this->owner->getImage();
+        
         if($image instanceof \rico\yii2images\models\PlaceHolder) {
             return false;
         }
@@ -131,12 +146,7 @@ class AttachImages extends \rico\yii2images\behaviors\ImageBehave
         if($size == 'full') {
             return $image->getUrl();
         }
-        
-        if($images = unserialize($this->owner->{$this->inAttribute})) {
-            $image = current($images);
-            return $image[$size];
-        }
-        
+
         return null;
     }
 }
