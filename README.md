@@ -46,7 +46,7 @@ php yii migrate/up --migrationPath=@vendor/costa-rico/yii2-images/migrations
 
 Модуль наследует модуль [CostaRico/yii2-images](https://github.com/CostaRico/yii2-images).
 
-К модели, к которой необходимо аттачить загружаемые картинки, добавляем поведение:
+К модели, к которой необходимо аттачить загружаемые картинки, добавляем поведение и новое поле типа file:
 
 ```php
     function behaviors()
@@ -59,6 +59,12 @@ php yii migrate/up --migrationPath=@vendor/costa-rico/yii2-images/migrations
                 'mode' => 'gallery',
             ],
         ];
+    }
+    public function rules()
+    {
+        //..
+        [['image'], 'file', 'extensions' => ['jpg', 'png', 'gif', 'jpeg']],
+        //..
     }
 ```
 
@@ -103,5 +109,3 @@ foreach($model->getThumbs('thumb') as $image) {
 
 * inAttribute - название поля таблицы, связанной с $model, где необходимо хранить кеш превьюшек
 * previewSize - размер превьюшки рядом с полем, по умолчанию '50x50'
-
-Внимание! Христа ради, не забудьте добавить ['options' => ['enctype' => 'multipart/form-data']] для вашей формы.
