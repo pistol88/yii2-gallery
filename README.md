@@ -63,7 +63,7 @@ php yii migrate/up --migrationPath=@vendor/costa-rico/yii2-images/migrations
     public function rules()
     {
         //..
-        [['image'], 'file', 'extensions' => ['jpg', 'png', 'gif', 'jpeg']],
+        [['image'], 'file', 'extensions' => ['jpg', 'png', 'gif', 'jpeg'], 'maxFiles' => 33],
         //..
     }
 ```
