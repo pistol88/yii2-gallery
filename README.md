@@ -105,7 +105,7 @@ foreach($model->getThumbs('thumb') as $image) {
 ---------------------------------
 Загрузка картинок осуществляется через виджет. Добавьте в _form.php внутри формы CRUDа вашей модели:
 
-```
+```php
 <?=\pistol88\gallery\widgets\Gallery::widget(['model' => $model, 'form' => $form]); ?>
 ```
 
