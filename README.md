@@ -105,7 +105,9 @@ foreach($model->getThumbs('thumb') as $image) {
 ---------------------------------
 Загрузка картинок осуществляется через виджет. Добавьте в _form.php внутри формы CRUDа вашей модели:
 
+```php
 <?=\pistol88\gallery\widgets\Gallery::widget(['model' => $model, 'form' => $form]); ?>
+```
 
 * inAttribute - название поля таблицы, связанной с $model, где необходимо хранить кеш превьюшек
 * previewSize - размер превьюшки рядом с полем, по умолчанию '50x50'
