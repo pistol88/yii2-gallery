@@ -27,12 +27,19 @@ class Gallery extends \yii\base\Widget
     public function run()
     {
         if($this->model->getGalleryMode() == 'single') {
-            if($image = $this->model->getImage()->getUrl($this->previewSize)) {
-                $img = Html::img($image, ['width' => current(explode('x', $this->previewSize))]);
+            if($image = $this->model->hasImage()) {
+                $image = $this->model->getImage();
+                $img = Html::img($image->getUrl($this->previewSize), ['width' => current(explode('x', $this->previewSize))]);
+                $img .= Html::tag('div', Html::a('Удалить', '#', ['data-action' => Url::toRoute(['/yii2images/default/delete']), 'class' => 'delete']));
+                $imageId = $image->id;
             } else {
                 $img = '';
+                $imageId = 0;
             }
-            return $img.$this->form->field($this->model, $this->inAttribute)->fileInput();
+            
+            $model = $this->model;
+            
+            return Html::tag('div', $img.$this->form->field($this->model, $this->inAttribute)->fileInput(), ['class' => 'pistol88-gallery-item',  'data-model' => $model::className(), 'data-id' => $this->model->id, 'data-image' => $imageId]);
         }
         $elements = $this->model->getImages();
 
@@ -63,7 +70,7 @@ class Gallery extends \yii\base\Widget
             $class .= ' main';
         }
         $model = $this->model;
-        $liParams = ['class' => $class,  'data-model' => $model::className(), 'data-id' => $this->model->id, 'data-image' => $image->id];
+        $liParams = ['class' => $class.' pistol88-gallery-item',  'data-model' => $model::className(), 'data-id' => $this->model->id, 'data-image' => $image->id];
         
         return Html::tag('li', $delete.$a, $liParams);
     }

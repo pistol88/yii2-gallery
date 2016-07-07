@@ -4,7 +4,7 @@ if (typeof pistol88 == "undefined" || !pistol88) {
 
 pistol88.gallery = {
     init: function () {
-        $('.pistol88-gallery a.delete').on('click', this.deleteProductImage);
+        $('.pistol88-gallery-item a.delete').on('click', this.deleteProductImage);
         $('.pistol88-gallery img').on('click', this.setMainProductImage);
     },
     setMainProductImage: function () {
@@ -15,8 +15,8 @@ pistol88.gallery = {
     },
     deleteProductImage: function () {
         if (confirm('realy?')) {
-            pistol88.gallery._sendData($(this).data('action'), $(this).parents('li').data());
-            $(this).parents('li').hide('slow');
+            pistol88.gallery._sendData($(this).data('action'), $(this).parents('.pistol88-gallery-item').data());
+            $(this).parents('.pistol88-gallery-item').hide('slow');
         }
         return false;
     },
