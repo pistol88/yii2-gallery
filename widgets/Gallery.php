@@ -36,7 +36,22 @@ class Gallery extends \yii\base\Widget
             }
             $model = $this->model;
             
-            return Html::tag('div', $img.$this->form->field($this->model, $this->inAttribute)->fileInput(), ['class' => 'pistol88-gallery-item',  'data-model' => $model::className(), 'data-id' => $this->model->id, 'data-image' => $imageId]);
+            return Html::tag('div', 
+                $img.
+                FileInput::widget([
+                'name' => 'galleryFiles',
+                'options' => [
+                    'accept' => 'image/*', 
+                    'multiple' => false,
+                    ]
+                ]) ,
+                [
+                    'class' => 'pistol88-gallery-item',  
+                    'data-model' => $model::className(), 
+                    'data-id' => $this->model->id, 
+                    'data-image' => $imageId
+                ]
+            );
         }
         $elements = $this->model->getImages();
 
