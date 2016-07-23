@@ -1,6 +1,3 @@
-# yii console command
-/yii
-
 # phpstorm project files
 .idea
 
@@ -20,8 +17,6 @@ Thumbs.db
 
 # composer itself is not needed
 composer.phar
-# composer.lock
-/composer.lock
 
 # Mac DS_Store Files
 .DS_Store
@@ -30,3 +25,7 @@ composer.phar
 phpunit.phar
 # local phpunit config
 /phpunit.xml
+
+
+#ricoStore
+web/store/*
