@@ -1,4 +1,5 @@
 <?php
+namespace pistol88\gallery\models;
 
 use yii;
 
@@ -9,15 +10,6 @@ class PlaceHolder extends Image
     private $itemId = '';
     public $filePath = 'placeHolder.png';
     public $urlAlias = 'placeHolder';
-
-
-    /*  public function getUrl($size = false){
-          $url = $this->getModule()->placeHolderUrl;
-          if(!$url){
-              throw new \Exception('PlaceHolder image must have url setting!!!');
-          }
-          return $url;
-      }*/
 
     public function __construct()
     {
