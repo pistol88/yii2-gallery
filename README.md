@@ -1,6 +1,7 @@
 Yii2-gallery
 ==========
-Это модуль был создан, чтобы дать возможность быстро загружать в админке картинки, добавлять титульник, описание, альтернативный текст, а также задать положение (чем выше значение тем выше в списке будет изображение).
+Это модуль был создан, чтобы дать возможность быстро загружать в админке картинки, добавлять название, описание, альтернативный текст, а также задать положение (чем выше значение тем выше в списке будет изображение).
+Модуль основан на [CostaRico/yii2-images](https://github.com/CostaRico/yii2-images).
 
 Установка
 ---------------------------------
@@ -79,13 +80,13 @@ foreach($images as $img) {
     //return url to resized and cropped (center) image by width and height
     echo $img->getUrl('200x300');
 
-    //return alt text to image
+    //returns the image alt text
     $img->alt
 
-    //return title to image
+    //return the image title
     $img->title
     
-    //return description image
+    //return a description of the image
     $img->description
 }
 
