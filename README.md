@@ -1,6 +1,6 @@
 Yii2-gallery
 ==========
-Это модуль был создан, чтобы дать возможность быстро загружать в админке картинки и аттачить их к [CostaRico/yii2-images](https://github.com/CostaRico/yii2-images).
+Это модуль был создан, чтобы дать возможность быстро загружать в админке картинки, добавлять титульник, описание, альтернативный текст, а также задать положение (чем выше значение тем выше в списке будет изображение).
 
 Установка
 ---------------------------------
@@ -22,18 +22,18 @@ php composer require pistol88/yii2-gallery "*"
 php composer update
 ```
 
-Миграция от CostaRico/yii2-images
+Миграция
 
 ```
-php yii migrate/up --migrationPath=@vendor/costa-rico/yii2-images/migrations
+php yii migrate/up --migrationPath=@vendor/pistol88/yii2-gallery/migrations
 ```
 
 Подключение и настройка
 ---------------------------------
-В конфигурационный файл приложения добавить модуль yii2images
+В конфигурационный файл приложения добавить модуль gallery
 ```php
     'modules' => [
-        'yii2images' => [
+        'gallery' => [
             'class' => 'pistol88\gallery\Module',
             'imagesStorePath' => dirname(dirname(__DIR__)).'/frontend/web/images/store', //path to origin images
             'imagesCachePath' => dirname(dirname(__DIR__)).'/frontend/web/images/cache', //path to resized copies
@@ -44,9 +44,7 @@ php yii migrate/up --migrationPath=@vendor/costa-rico/yii2-images/migrations
     ]
 ```
 
-Модуль наследует модуль [CostaRico/yii2-images](https://github.com/CostaRico/yii2-images).
-
-К модели, к которой необходимо аттачить загружаемые картинки, добавляем поведение и новое поле типа file:
+К модели, к которой необходимо аттачить загружаемые картинки, добавляем поведение:
 
 ```php
     function behaviors()
@@ -54,27 +52,17 @@ php yii migrate/up --migrationPath=@vendor/costa-rico/yii2-images/migrations
         return [
             'images' => [
                 'class' => 'pistol88\gallery\behaviors\AttachImages',
-                'inAttribute' => 'image',
-                'sizes' => ['thumb' => '50x50', 'medium' => '300x300', 'big' => '500x500'],
                 'mode' => 'gallery',
             ],
         ];
     }
-    public function rules()
-    {
-        //..
-        [['image'], 'file', 'extensions' => ['jpg', 'png', 'gif', 'jpeg'], 'maxFiles' => 33],
-        //..
-    }
 ```
 
-*inAttribute - название поля модели, где будет храниться PHP serialize (кеш превьюшек), рекомендую типа text
-*sizes - перечень размеров, которые будут кешироваться в inAttribute
 *mode - тип загрузки. gallery - массовая загрузка, single - одиночное поле.
 
 Использование
 ---------------------------------
-Использовать можно также, как напрямую из [CostaRico/yii2-images](https://github.com/CostaRico/yii2-images)
+Использовать можно также, как напрямую:
 
 ```php
 $images = $model->getImages();
@@ -90,24 +78,21 @@ foreach($images as $img) {
 
     //return url to resized and cropped (center) image by width and height
     echo $img->getUrl('200x300');
-}
-```
 
-Мой модуль кеширует картинки в поле (для экономии ресурсов), потому рекомендую для вывода картинок использовать методы getThumb('thumb') и getThumbs('thumb'), единственный аргумент - это нужный размер, перечень размеров задается при присоединении поведения атрибутом sizes.
+    //return alt text to image
+    $img->alt
 
-```php
-foreach($model->getThumbs('thumb') as $image) {
-    echo '<img src="'.$image.'">';
+    //return title to image
+    $img->title
+    
+    //return description image
+    $img->description
 }
-```
 
 Виджеты
 ---------------------------------
 Загрузка картинок осуществляется через виджет. Добавьте в _form.php внутри формы CRUDа вашей модели:
 
 ```php
-<?=\pistol88\gallery\widgets\Gallery::widget(['model' => $model, 'form' => $form]); ?>
+<?=\pistol88\gallery\widgets\Gallery::widget(['model' => $model]); ?>
 ```
-
-* inAttribute - название поля таблицы, связанной с $model, где необходимо хранить кеш превьюшек
-* previewSize - размер превьюшки рядом с полем, по умолчанию '50x50'

@@ -1,15 +1,16 @@
 <?php
-
 namespace pistol88\gallery\controllers;
 
+use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
 use Yii;
+use common\models\Product;
 
-class DefaultController extends \yii\web\Controller
+class DefaultController extends Controller
 {
-    public function behaviors()
+        public function behaviors()
     {
         return [
             'verbs' => [
@@ -30,30 +31,55 @@ class DefaultController extends \yii\web\Controller
         ];
     }
 
+    
+    public function actionIndex()
+    {
+        return $this->render('index');
+    }
+            
+    public function actionModal()
+    {
+        $id = $_POST['id_courses'];
+        $c = Product::findOne($id);
+        
+        $arr = $this->findImage();
+        $post = \Yii::$app->request->post();
+        if ($arr) {
+            return $this->renderPartial('modalAdd', [
+                'model' => $arr['image'],
+                'post' => $post,
+            ]);
+        }
+        return $this->returnJson('false', 'Model or Image not found');
+    }
+
+    public function actionWrite()
+    {
+        $arr = $this->findImage();
+        if ($arr['image']->load(\Yii::$app->request->post()) && $arr['image']->save()) {
+            return $this->returnJson('success');
+        }
+        return $this->returnJson('false', 'Model or Image not found');
+    }
+
     public function actionDelete()
     {
-        $model = $this->findModel(yii::$app->request->post('model'), yii::$app->request->post('id'));
-        foreach ($model->getImages() as $img) {
-            if ($img->id == yii::$app->request->post('image')) {
-                $model->removeImage($img);
-                break;
-            }
+        $arr = $this->findImage();
+        if ($arr) {
+            $arr['model']->removeImage($arr['image']);
+            return $this->returnJson('success');
         }
-        
-        return $this->returnJson('success');
+        return $this->returnJson('false', 'Model or Image not found');
     }
     
     public function actionSetmain()
     {
-        $model = $this->findModel(yii::$app->request->post('model'), yii::$app->request->post('id'));
-        foreach ($model->getImages() as $img) {
-            if ($img->id == yii::$app->request->post('image')) {
-                $model->setMainImage($img);
-                break;
-            }
+        $arr = $this->findImage();
+        if ($arr) {
+            $arr['model']->setMainImage($arr['image']);
+            return $this->returnJson('success');
         }
-        
-        return $this->returnJson('success');
+        return $this->returnJson('false', 'Model or Image not found');
     }
     
     private function returnJson($result, $error = false)
@@ -61,7 +87,18 @@ class DefaultController extends \yii\web\Controller
         $json = ['result' => $result, 'error' => $error];
         return Json::encode($json);
     }
-    
+
+    private function findImage()
+    {
+        $model = $this->findModel(Yii::$app->request->post('model'), Yii::$app->request->post('id'));
+        foreach ($model->getImages() as $img) {
+            if ($img->id == Yii::$app->request->post('image')) {
+                 return $arr = ['model' => $model, 'image' => $img];
+            }
+        }
+        return false;
+    }
+
     private function findModel($model, $id)
     {
         $model = '\\'.$model;

@@ -25,3 +25,10 @@ ul.pistol88-gallery {
     top: 0px;
     color: red;
 }
+
+.pistol88-gallery li a.write {
+    position: absolute;
+    top: 0px;
+    color: green;
+    text-shadow: 1px 1px 4px black ;
+}

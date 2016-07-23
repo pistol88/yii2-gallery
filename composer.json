@@ -1,7 +1,7 @@
 {
     "name": "pistol88/yii2-gallery",
-    "description": "Модуль позволяет кешировать и загружать виджетом картинки для CostaRico/yii2-images",
-    "keywords": ["yii2", "yii2", "application", "images", "yii2-images", "CostaRico", "pistol88"],
+    "description": "Модуль позволяет загружать виджетом картинки",
+    "keywords": ["yii2", "yii2", "application", "images", "yii2-images", "pistol88"],
     "homepage": "https://github.com/pistol88/yii2-gallery",
     "type": "yii2-extension",
     "license": "BSD-3-Clause",
@@ -20,7 +20,7 @@
         "yiisoft/yii2": "*",
         "yiisoft/yii2-bootstrap": "*",
         "kartik-v/yii2-widget-fileinput": "*",
-        "costa-rico/yii2-images": "*"
+        "abeautifulsite/simpleimage": "*"
     },
     "config": {
         "process-timeout": 1800
