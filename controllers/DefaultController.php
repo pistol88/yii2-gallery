@@ -39,9 +39,6 @@ class DefaultController extends Controller
             
     public function actionModal()
     {
-        $id = $_POST['id_courses'];
-        $c = Product::findOne($id);
-        
         $arr = $this->findImage();
         $post = \Yii::$app->request->post();
         if ($arr) {
