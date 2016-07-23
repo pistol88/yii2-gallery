@@ -301,7 +301,7 @@ class AttachImages extends Behavior
 
     public function hasImage()
     {
-        if($this->getImage() instanceof pistol88\gallery\models\PlaceHolder) {
+        if($this->getImage() instanceof \pistol88\gallery\models\PlaceHolder) {
             return false;
         } else {
             return true;
