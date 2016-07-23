@@ -6,7 +6,6 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
 use Yii;
-use common\models\Product;
 
 class DefaultController extends Controller
 {
@@ -39,9 +38,6 @@ class DefaultController extends Controller
             
     public function actionModal()
     {
-        $id = $_POST['id_courses'];
-        $c = Product::findOne($id);
-        
         $arr = $this->findImage();
         $post = \Yii::$app->request->post();
         if ($arr) {
