@@ -88,6 +88,7 @@ foreach($images as $img) {
     //return description image
     $img->description
 }
+```
 
 Виджеты
 ---------------------------------
