@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Html;
-
 use yii\widgets\ActiveForm;
 
 ?>
@@ -23,7 +22,7 @@ use yii\widgets\ActiveForm;
 
     <?= Html::hiddenInput('image',$post['image']) ?>
 
-    <div class="buttonSet text-right button-container noctua-button-submit">
+    <div class="buttonSet text-right button-container">
         <?= Html::submitButton('Отправить') ?>
     </div>
     

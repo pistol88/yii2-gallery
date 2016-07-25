@@ -1,8 +1,8 @@
 <?php
 namespace pistol88\gallery\controllers;
 
-use yii\web\Controller;
 use yii;
+use yii\web\Controller;
 use pistol88\gallery\ModuleTrait;
 
 class ImagesController extends Controller
@@ -19,12 +19,14 @@ class ImagesController extends Controller
         echo "Hello, man. It's ok, dont worry.";
     }
 
-    public function actionImageByItemAndAlias($item='', $dirtyAlias)
+    public function actionImageByItemAndAlias($item = '', $dirtyAlias)
     {
         $dotParts = explode('.', $dirtyAlias);
+        
         if(!isset($dotParts[1])){
-            throw new \yii\web\HttpException(404, 'Image must have extension');
+            throw new yii\web\HttpException(404, 'Image must have extension');
         }
+        
         $dirtyAlias = $dotParts[0];
 
         $size = isset(explode('_', $dirtyAlias)[1]) ? explode('_', $dirtyAlias)[1] : false;
@@ -32,7 +34,7 @@ class ImagesController extends Controller
         $image = $this->getModule()->getImage($item, $alias);
 
         if($image->getExtension() != $dotParts[1]){
-            throw new \yii\web\HttpException(404, 'Image not found (extenstion)');
+            throw new yii\web\HttpException(404, 'Image not found (extenstion)');
         }
 
         if($image){

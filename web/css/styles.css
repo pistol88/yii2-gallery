@@ -1,13 +1,11 @@
-ul.pistol88-gallery {
+.pistol88-gallery {
     list-style-type:none; 
     margin-left: -45px;
 }
 
-.pistol88-gallery li{
+.pistol88-gallery-item{
     list-style: none;
     float: left;
-    width: 130px;
-    height: 120px;
     overflow: hidden;
     padding: 3px;
     margin: 3px;
@@ -15,18 +13,18 @@ ul.pistol88-gallery {
     position: relative;
 }
 
-.pistol88-gallery li.main {
+.pistol88-gallery .main {
     border: 2px solid red;
 }
 
-.pistol88-gallery li a.delete {
+.pistol88-gallery-item a.delete {
     position: absolute;
     right: 1px;
     top: 0px;
     color: red;
 }
 
-.pistol88-gallery li a.write {
+.pistol88-gallery-item a.write {
     position: absolute;
     top: 0px;
     color: green;

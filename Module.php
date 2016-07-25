@@ -8,15 +8,10 @@ use pistol88\gallery\models\Image;
 class Module extends \yii\base\Module
 {
     public $imagesStorePath = '@app/web/store';
-
     public $imagesCachePath = '@app/web/imgCache';
-
     public $graphicsLibrary = 'GD';
-
     public $placeHolderPath;
-
     public $waterMark = false;
-
     public $adminRoles = ['admin', 'superadmin'];
 
     public function getImage($item, $dirtyAlias)
