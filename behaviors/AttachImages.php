@@ -9,7 +9,7 @@ use pistol88\gallery\models;
 use yii\helpers\BaseFileHelper;
 use pistol88\gallery\ModuleTrait;
 use pistol88\gallery\models\Image;
-use yii\helpers\Json;
+use pistol88\gallery\models\PlaceHolder;
 
 class AttachImages extends Behavior
 {
@@ -21,8 +21,8 @@ class AttachImages extends Behavior
     public $mode = 'gallery';
     public $webUploadsPath = '/uploads';
     public $allowExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-    private $doResetImages = true; 
-    private $lastUploadedImage = false;
+    public $inputName = 'galleryFiles';
+    private $doResetImages = true;
 
     public function init()
     {
@@ -45,27 +45,28 @@ class AttachImages extends Behavior
             if (!file_exists($absolutePath)) {
                 throw new \Exception('File not exist! :'.$absolutePath);
             }
-        }else{
-            //nothing
         }
-
+        
         if (!$this->owner->id) {
             throw new \Exception('Owner must have id when you attach image!');
         }
 
         $pictureFileName =
-            substr(md5(microtime(true) . $absolutePath), 4, 6)
-            . '.' .
-            pathinfo($absolutePath, PATHINFO_EXTENSION);
+            substr(md5(microtime(true)
+            . $absolutePath), 4, 6)
+            . '.'
+            . pathinfo($absolutePath, PATHINFO_EXTENSION);
+
         $pictureSubDir = $this->getModule()->getModelSubDir($this->owner);
         $storePath = $this->getModule()->getStorePath($this->owner);
 
-        $newAbsolutePath = $storePath .
-            DIRECTORY_SEPARATOR . $pictureSubDir .
-            DIRECTORY_SEPARATOR . $pictureFileName;
+        $newAbsolutePath = $storePath
+            . DIRECTORY_SEPARATOR
+            . $pictureSubDir
+            . DIRECTORY_SEPARATOR
+            . $pictureFileName;
 
-        BaseFileHelper::createDirectory($storePath . DIRECTORY_SEPARATOR . $pictureSubDir,
-            0775, true);
+        BaseFileHelper::createDirectory($storePath . DIRECTORY_SEPARATOR . $pictureSubDir, 0775, true);
 
         copy($absolutePath, $newAbsolutePath);
 
@@ -78,11 +79,10 @@ class AttachImages extends Behavior
         }else{
             $image = new ${$this->modelClass}();
         }
+
         $image->itemId = $this->owner->id;
         $image->filePath = $pictureSubDir . '/' . $pictureFileName;
         $image->modelName = $this->getModule()->getShortClass($this->owner);
-
-
         $image->urlAlias = $this->getAlias($image);
 
         if(!$image->save()){
@@ -90,7 +90,6 @@ class AttachImages extends Behavior
         }
 
         if (count($image->getErrors()) > 0) {
-
             $ar = array_shift($image->getErrors());
 
             unlink($newAbsolutePath);
@@ -98,17 +97,9 @@ class AttachImages extends Behavior
         }
         $img = $this->owner->getImage();
 
-        //If main image not exists
-        if(
-            is_object($img) && get_class($img)=='pistol88\gallery\models\PlaceHolder'
-            or
-            $img == null
-            or
-            $isMain
-        ){
+        if ( is_object($img) && get_class($img)=='pistol88\gallery\models\PlaceHolder' or $img == null or $isMain) {
             $this->setMainImage($image);
         }
-
 
         return $image;
     }
@@ -118,16 +109,15 @@ class AttachImages extends Behavior
         if ($this->owner->id != $img->itemId) {
             throw new \Exception('Image must belong to this model');
         }
+
         $counter = 1;
-        /* @var $img Image */
         $img->setMain(true);
         $img->urlAlias = $this->getAliasString() . '-' . $counter;
         $img->save();
 
-
         $images = $this->owner->getImages();
-        foreach ($images as $allImg) {
 
+        foreach ($images as $allImg) {
             if ($allImg->id == $img->id) {
                 continue;
             } else {
@@ -146,12 +136,11 @@ class AttachImages extends Behavior
     {
         $cachePath = $this->getModule()->getCachePath();
         $subdir = $this->getModule()->getModelSubDir($this->owner);
-
         $dirToRemove = $cachePath . '/' . $subdir;
 
         if (preg_match('/' . preg_quote($cachePath, '/') . '/', $dirToRemove)) {
             BaseFileHelper::removeDirectory($dirToRemove);
-            //exec('rm -rf ' . $dirToRemove);
+
             return true;
         } else {
             return false;
@@ -161,26 +150,23 @@ class AttachImages extends Behavior
     public function getImages()
     {
         $finder = $this->getImagesFinder();
-
-        $imageQuery = Image::find()
-            ->where($finder);
+        $imageQuery = Image::find()->where($finder);
         $imageQuery->orderBy(['isMain' => SORT_DESC,'sort' => SORT_DESC, 'id' => SORT_ASC]);
-
         $imageRecords = $imageQuery->all();
         if(!$imageRecords){
             return [$this->getModule()->getPlaceHolder()];
         }
+
         return $imageRecords;
     }
 
     public function getImage()
     {
         $finder = $this->getImagesFinder(['isMain' => 1]);
-        $imageQuery = Image::find()
-            ->where($finder);
+        $imageQuery = Image::find()->where($finder);
         $imageQuery->orderBy(['isMain' => SORT_DESC,'sort' => SORT_DESC, 'id' => SORT_ASC]);
-
         $img = $imageQuery->one();
+
         if(!$img){
             return $this->getModule()->getPlaceHolder();
         }
@@ -196,11 +182,12 @@ class AttachImages extends Behavior
             $class = $this->getModule()->className;
             $imageQuery = $class::find();
         }
+
         $finder = $this->getImagesFinder(['name' => $name]);
         $imageQuery->where($finder);
         $imageQuery->orderBy(['isMain' => SORT_DESC, 'id' => SORT_ASC]);
-
         $img = $imageQuery->one();
+
         if(!$img){
             return $this->getModule()->getPlaceHolder();
         }
@@ -211,6 +198,7 @@ class AttachImages extends Behavior
     public function removeImages()
     {
         $images = $this->owner->getImages();
+
         if (count($images) < 1) {
             return true;
         } else {
@@ -225,11 +213,12 @@ class AttachImages extends Behavior
         //$img->clearCache();
 
         $storePath = $this->getModule()->getStorePath();
-
         $fileToRemove = $storePath . DIRECTORY_SEPARATOR . $img->filePath;
+
         if (preg_match('@\.@', $fileToRemove) and is_file($fileToRemove)) {
             unlink($fileToRemove);
         }
+
         $img->delete();
     }
 
@@ -274,37 +263,42 @@ class AttachImages extends Behavior
     {
         return $this->mode;
     }
+
+    public function getInputName()
+    {
+        return $this->inputName;
+    }
     
     public function setImages($event)
     {
         if($this->doResetImages) {
-        $userImages = UploadedFile::getInstancesByName('galleryFiles');
-        if ($userImages) {  
-            foreach ($userImages as $file) {
-                if(in_array(strtolower($file->extension), $this->allowExtensions)) {
-                    $file->saveAs("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
-                    if($this->owner->getGalleryMode() == 'single') {
-                        foreach($this->owner->getImages() as $image) {
-                            $image->delete();
+            $userImages = UploadedFile::getInstancesByName($this->getInputName());
+
+            if ($userImages) {
+                foreach ($userImages as $file) {
+                    if(in_array(strtolower($file->extension), $this->allowExtensions)) {
+                        $file->saveAs("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
+
+                        if($this->owner->getGalleryMode() == 'single') {
+                            foreach($this->owner->getImages() as $image) {
+                                $image->delete();
+                            }
                         }
+
+                        $this->attachImage("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
                     }
-                    $attach =$this->attachImage("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
-                    $this->lastUploadedImage = $attach;
                 }
-            } 
-            $this->doResetImages = false;
-            $this->owner->save(false);
+
+                $this->doResetImages = false;
+                $this->owner->save(false);
+            }
         }
-        }
+
         return $this;
     }
 
     public function hasImage()
     {
-        if($this->getImage() instanceof pistol88\gallery\models\PlaceHolder) {
-            return false;
-        } else {
-            return true;
-        }
+        return ($this->getImage() instanceof PlaceHolder) ? false : true;
     }
 }

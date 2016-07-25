@@ -1,12 +1,11 @@
 <?php
 namespace pistol88\gallery\controllers;
 
+use yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
-use Yii;
-use common\models\Product;
 
 class DefaultController extends Controller
 {
@@ -41,58 +40,69 @@ class DefaultController extends Controller
     {
         $arr = $this->findImage();
         $post = \Yii::$app->request->post();
+        
         if ($arr) {
             return $this->renderPartial('modalAdd', [
                 'model' => $arr['image'],
                 'post' => $post,
             ]);
         }
+        
         return $this->returnJson('false', 'Model or Image not found');
     }
 
     public function actionWrite()
     {
         $arr = $this->findImage();
-        if ($arr['image']->load(\Yii::$app->request->post()) && $arr['image']->save()) {
+        
+        if ($arr['image']->load(Yii::$app->request->post()) && $arr['image']->save()) {
             return $this->returnJson('success');
         }
+        
         return $this->returnJson('false', 'Model or Image not found');
     }
 
     public function actionDelete()
     {
         $arr = $this->findImage();
+        
         if ($arr) {
             $arr['model']->removeImage($arr['image']);
             return $this->returnJson('success');
         }
+        
         return $this->returnJson('false', 'Model or Image not found');
     }
     
     public function actionSetmain()
     {
         $arr = $this->findImage();
+        
         if ($arr) {
             $arr['model']->setMainImage($arr['image']);
             return $this->returnJson('success');
         }
+        
         return $this->returnJson('false', 'Model or Image not found');
     }
     
     private function returnJson($result, $error = false)
     {
         $json = ['result' => $result, 'error' => $error];
+        
         return Json::encode($json);
     }
 
     private function findImage()
     {
         $model = $this->findModel(Yii::$app->request->post('model'), Yii::$app->request->post('id'));
+        
         foreach ($model->getImages() as $img) {
             if ($img->id == Yii::$app->request->post('image')) {
                  return $arr = ['model' => $model, 'image' => $img];
             }
         }
+        
         return false;
     }
 
@@ -100,6 +110,7 @@ class DefaultController extends Controller
     {
         $model = '\\'.$model;
         $model = new $model();
+
         return $model::findOne($id);
     }
 }
