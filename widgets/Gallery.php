@@ -28,7 +28,7 @@ class Gallery extends \yii\base\Widget
 
         if($model->getGalleryMode() == 'single') {
             if($model->hasImage()) {
-                $image = $model->getImage();
+                $image = $model->image;
                 $img = $this->getImagePreview($image);
                 $params = $this->getParams($image->id);
             }
