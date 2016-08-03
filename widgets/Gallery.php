@@ -28,10 +28,10 @@ class Gallery extends \yii\base\Widget
 
         if($model->getGalleryMode() == 'single') {
             if($model->hasImage()) {
-                if($image = $this->model->image) {
-                    $img = $this->getImagePreview($image);
-                    $params = $this->getParams($image->id);
-                }
+                $image = $this->model->getImage(); 
+                $img = $this->getImagePreview($image);
+                $params = $this->getParams($image->id);
+                
             }
 
             return Html::tag('div', $img, $params) . '<br style="clear: both;" />' . $this->getFileInput();
