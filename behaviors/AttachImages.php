@@ -162,7 +162,7 @@ class AttachImages extends Behavior
 
     public function getImage()
     {
-        $finder = $this->getImagesFinder(['isMain' => 1]);
+        $finder = $this->getImagesFinder();
         $imageQuery = Image::find()->where($finder);
         $imageQuery->orderBy(['isMain' => SORT_DESC,'sort' => SORT_DESC, 'id' => SORT_ASC]);
         $img = $imageQuery->one();
