@@ -278,7 +278,7 @@ class AttachImages extends Behavior
                 foreach ($userImages as $file) {
                     if(in_array(strtolower($file->extension), $this->allowExtensions)) {
                         
-                                                if (!file_exists($this->uploadsPath)){
+                        if (!file_exists($this->uploadsPath)){
                             mkdir($this->uploadsPath, 0777, true);
                         }
                         
