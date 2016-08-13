@@ -277,6 +277,11 @@ class AttachImages extends Behavior
             if ($userImages) {
                 foreach ($userImages as $file) {
                     if(in_array(strtolower($file->extension), $this->allowExtensions)) {
+                        
+                                                if (!file_exists($this->uploadsPath)){
+                            mkdir($this->uploadsPath, 0777, true);
+                        }
+                        
                         $file->saveAs("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
 
                         if($this->owner->getGalleryMode() == 'single') {
