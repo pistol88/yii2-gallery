@@ -92,8 +92,20 @@ foreach($images as $img) {
 
 Виджеты
 ---------------------------------
-Загрузка картинок осуществляется через виджет. Добавьте в _form.php внутри формы CRUDа вашей модели:
+Загрузка картинок осуществляется через виджет. Добавьте в _form.php внутри формы CRUDа вашей модели.
+Виджету передаются следующие параметры:
+model => Модель к которой будут привязаны картинки, по умолчанию null;
+previewSize => размер превью загруженных изображений, по умолчанию '140x140';
+fileInputPluginLoading => нужно ли показывать индикатор загрузки прогресса в месте ввода, по умолчанию true;
+fileInputPluginOptions => массив свойств виджета [kartik/file/fileInput](http://demos.krajee.com/widget-details/fileinput), по умолчанию [];
 
 ```php
-<?=\pistol88\gallery\widgets\Gallery::widget(['model' => $model]); ?>
+<?=\pistol88\gallery\widgets\Gallery::widget(
+    [
+        'model' => $model,
+        'previewSize' => '50x50',
+        'fileInputPluginLoading' => true,
+        'fileInputPluginOptions' => []
+    ]
+); ?>
 ```

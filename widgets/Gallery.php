@@ -9,6 +9,8 @@ class Gallery extends \yii\base\Widget
 {
     public $model = null;
     public $previewSize = '140x140';
+    public $fileInputPluginLoading = true;
+    public $fileInputPluginOptions = [];
 
     public function init()
     {
@@ -28,10 +30,10 @@ class Gallery extends \yii\base\Widget
 
         if($model->getGalleryMode() == 'single') {
             if($model->hasImage()) {
-                $image = $this->model->getImage(); 
+                $image = $this->model->getImage();
                 $img = $this->getImagePreview($image);
                 $params = $this->getParams($image->id);
-                
+
             }
 
             return Html::tag('div', $img, $params) . '<br style="clear: both;" />' . $this->getFileInput();
@@ -75,14 +77,16 @@ class Gallery extends \yii\base\Widget
             'options' => [
                 'accept' => 'image/*',
                 'multiple' => $this->model->getGalleryMode() == 'gallery',
-            ]
+            ],
+            'pluginOptions' => $this->fileInputPluginOptions,
+            'pluginLoading' => $this->fileInputPluginLoading
         ]);
     }
 
     private function getParams($id)
     {
         $model = $this->model;
-        
+
         return  [
             'class' => 'pistol88-gallery-item',
             'data-model' => $model::className(),
@@ -94,12 +98,12 @@ class Gallery extends \yii\base\Widget
     private function getImagePreview($image)
     {
         $size = (explode('x', $this->previewSize));
-        
+
         $delete = Html::a('✖', '#', ['data-action' => Url::toRoute(['/gallery/default/delete']), 'class' => 'delete']);
         $write = Html::a('<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>', '#', ['data-action' => Url::toRoute(['/gallery/default/modal']), 'class' => 'write']);
         $img = Html::img($image->getUrl($this->previewSize), ['data-action' => Url::toRoute(['/gallery/default/setmain']), 'width' => $size[0], 'height' => $size[1], 'class' => 'thumb']);
         $a = Html::a($img, $image->getUrl());
-        
+
         return $delete.$write.$a;
     }
 }
