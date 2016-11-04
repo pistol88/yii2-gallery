@@ -99,6 +99,8 @@ previewSize => размер превью загруженных изображе
 fileInputPluginLoading => нужно ли показывать индикатор загрузки прогресса в месте ввода, по умолчанию true;
 fileInputPluginOptions => массив свойств виджета [kartik/file/fileInput](http://demos.krajee.com/widget-details/fileinput), по умолчанию [];
 
+Не забудьте <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?> для формы.
+
 ```php
 <?=\pistol88\gallery\widgets\Gallery::widget(
     [
