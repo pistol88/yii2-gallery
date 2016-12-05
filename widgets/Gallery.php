@@ -11,7 +11,8 @@ class Gallery extends \yii\base\Widget
     public $previewSize = '140x140';
     public $fileInputPluginLoading = true;
     public $fileInputPluginOptions = [];
-
+    public $label = 'Изображение';
+ 
     public function init()
     {
         $view = $this->getView();
@@ -27,6 +28,7 @@ class Gallery extends \yii\base\Widget
         $model = $this->model;
         $params = [];
         $img = '';
+        $label = '<label class="control-label">'. $this->label .'</label>';
 
         if($model->getGalleryMode() == 'single') {
             if($model->hasImage()) {
@@ -36,7 +38,7 @@ class Gallery extends \yii\base\Widget
 
             }
 
-            return Html::tag('div', $img, $params) . '<br style="clear: both;" />' . $this->getFileInput();
+            return Html::tag('div', $label . $img, $params) . '<br style="clear: both;" />' . $this->getFileInput();
         }
 
         $elements = $this->model->getImages();
@@ -49,7 +51,7 @@ class Gallery extends \yii\base\Widget
                 'class' => 'pistol88-gallery'
             ]);
 
-        return Html::tag( 'div', $cart . '<br style="clear: both;" />' . $this->getFileInput() );
+        return Html::tag( 'div', $label . $cart . '<br style="clear: both;" />' . $this->getFileInput() );
     }
 
     private function row($image)

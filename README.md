@@ -96,6 +96,7 @@ foreach($images as $img) {
 Виджету передаются следующие параметры:
 model => Модель к которой будут привязаны картинки, по умолчанию null;
 previewSize => размер превью загруженных изображений, по умолчанию '140x140';
+label => метка для виджета по умолчанию 'Изображение';
 fileInputPluginLoading => нужно ли показывать индикатор загрузки прогресса в месте ввода, по умолчанию true;
 fileInputPluginOptions => массив свойств виджета [kartik/file/fileInput](http://demos.krajee.com/widget-details/fileinput), по умолчанию [];
 
