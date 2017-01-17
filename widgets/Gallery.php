@@ -42,7 +42,7 @@ class Gallery extends \yii\base\Widget
             return Html::tag('div', $label . $img, $params) . '<br style="clear: both;" />' . $this->getFileInput();
         }
 
-        if (  get_class($this->model->getImage()) !== 'pistol88\gallery\models\PlaceHolder' ){
+        if (  $this->model->hasImage() ){
             $elements = $this->model->getImages();
             $cart = Html::ul(
                 $elements,
