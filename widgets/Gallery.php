@@ -29,7 +29,8 @@ class Gallery extends \yii\base\Widget
         $params = [];
         $img = '';
         $label = '<label class="control-label">'. $this->label .'</label>';
-
+        $cart = '';
+        
         if($model->getGalleryMode() == 'single') {
             if($model->hasImage()) {
                 $image = $this->model->getImage();
@@ -41,15 +42,17 @@ class Gallery extends \yii\base\Widget
             return Html::tag('div', $label . $img, $params) . '<br style="clear: both;" />' . $this->getFileInput();
         }
 
-        $elements = $this->model->getImages();
-        $cart = Html::ul(
-            $elements,
-            [
-                'item' => function($item) {
-                    return $this->row($item);
-                },
-                'class' => 'pistol88-gallery'
-            ]);
+        if (  get_class($this->model->getImage()) !== 'pistol88\gallery\models\PlaceHolder' ){
+            $elements = $this->model->getImages();
+            $cart = Html::ul(
+                $elements,
+                [
+                    'item' => function($item) {
+                        return $this->row($item);
+                    },
+                    'class' => 'pistol88-gallery'
+                ]);
+        }
 
         return Html::tag( 'div', $label . $cart . '<br style="clear: both;" />' . $this->getFileInput() );
     }
