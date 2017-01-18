@@ -22,7 +22,6 @@ class AttachImages extends Behavior
     public $webUploadsPath = '/uploads';
     public $allowExtensions = ['jpg', 'jpeg', 'png', 'gif'];
     public $inputName = 'galleryFiles';
-    private $doResetImages = true;
 
     public function init()
     {
@@ -210,7 +209,7 @@ class AttachImages extends Behavior
     
     public function removeImage(Image $img)
     {
-        //$img->clearCache();
+        $img->clearCache();
 
         $storePath = $this->getModule()->getStorePath();
         $fileToRemove = $storePath . DIRECTORY_SEPARATOR . $img->filePath;
@@ -271,31 +270,26 @@ class AttachImages extends Behavior
     
     public function setImages($event)
     {
-        if($this->doResetImages) {
-            $userImages = UploadedFile::getInstancesByName($this->getInputName());
+        $userImages = UploadedFile::getInstancesByName($this->getInputName());
 
-            if ($userImages) {
-                foreach ($userImages as $file) {
-                    if(in_array(strtolower($file->extension), $this->allowExtensions)) {
-                        
-                        if (!file_exists($this->uploadsPath)){
-                            mkdir($this->uploadsPath, 0777, true);
-                        }
-                        
-                        $file->saveAs("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
-
-                        if($this->owner->getGalleryMode() == 'single') {
-                            foreach($this->owner->getImages() as $image) {
-                                $image->delete();
-                            }
-                        }
-
-                        $this->attachImage("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
+        if ($userImages) {
+            foreach ($userImages as $file) {
+                if(in_array(strtolower($file->extension), $this->allowExtensions)) {
+                    
+                    if (!file_exists($this->uploadsPath)){
+                        mkdir($this->uploadsPath, 0777, true);
                     }
-                }
+                    
+                    $file->saveAs("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
 
-                $this->doResetImages = false;
-                $this->owner->save(false);
+                    if($this->owner->getGalleryMode() == 'single') {
+                        foreach($this->owner->getImages() as $image) {
+                            $image->delete();
+                        }
+                    }
+
+                    $this->attachImage("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
+                }
             }
         }
 
