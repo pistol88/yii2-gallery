@@ -20,7 +20,7 @@
         "yiisoft/yii2": "*",
         "yiisoft/yii2-bootstrap": "*",
         "kartik-v/yii2-widget-fileinput": "*",
-        "abeautifulsite/simpleimage": "*"
+        "abeautifulsite/simpleimage": "2.*"
     },
     "config": {
         "process-timeout": 1800
