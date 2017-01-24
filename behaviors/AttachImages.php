@@ -22,11 +22,19 @@ class AttachImages extends Behavior
     public $webUploadsPath = '/uploads';
     public $allowExtensions = ['jpg', 'jpeg', 'png', 'gif'];
     public $inputName = 'galleryFiles';
+    private $doResetImages = true;
+    public $quality = 60;
 
     public function init()
     {
         if (empty($this->uploadsPath)) {
             $this->uploadsPath = yii::$app->getModule('gallery')->imagesStorePath;
+        }
+
+        if ($this->quality > 100) {
+            $this->quality = 100;
+        } elseif ($this->quality < 0) {
+            $this->quality = 0;
         }
     }
 
@@ -35,9 +43,42 @@ class AttachImages extends Behavior
         return [
             ActiveRecord::EVENT_BEFORE_UPDATE => 'setImages',
             ActiveRecord::EVENT_AFTER_INSERT => 'setImages',
+            ActiveRecord::EVENT_BEFORE_DELETE => 'removeImages',
         ];
     }
-    
+
+    private function resizePhoto($path, $tmp_name){
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+
+        switch($type){
+            case 'jpeg':
+            case 'jpg': {
+                $source = imagecreatefromjpeg($tmp_name);
+                $result = imagejpeg($source, $path, $this->quality);
+                break;
+            }
+            case 'png': {
+                $source = imagecreatefrompng($tmp_name);
+                imagesavealpha($source, true);
+                $quality = (int) (100 - $this->quality) / 10 - 1;
+                $result = imagepng($source, $path, $quality);
+                break;
+
+            }
+            case 'gif': {
+                $source = imagecreatefromgif($tmp_name);
+                $result = imagegif($source, $path);
+                break;
+            }
+
+            default: return false;
+        }
+
+        imagedestroy($source);
+
+        return $result;
+    }
+
     public function attachImage($absolutePath, $isMain = false)
     {
         if(!preg_match('#http#', $absolutePath)){
@@ -67,7 +108,7 @@ class AttachImages extends Behavior
 
         BaseFileHelper::createDirectory($storePath . DIRECTORY_SEPARATOR . $pictureSubDir, 0775, true);
 
-        copy($absolutePath, $newAbsolutePath);
+        $this->resizePhoto($newAbsolutePath, $absolutePath);
 
         if (!file_exists($absolutePath)) {
             throw new \Exception('Cant copy file! ' . $absolutePath . ' to ' . $newAbsolutePath);
@@ -272,14 +313,14 @@ class AttachImages extends Behavior
     {
         $userImages = UploadedFile::getInstancesByName($this->getInputName());
 
-        if ($userImages) {
+        if ($userImages && $this->doResetImages) {
             foreach ($userImages as $file) {
                 if(in_array(strtolower($file->extension), $this->allowExtensions)) {
-                    
+
                     if (!file_exists($this->uploadsPath)){
                         mkdir($this->uploadsPath, 0777, true);
                     }
-                    
+
                     $file->saveAs("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
 
                     if($this->owner->getGalleryMode() == 'single') {
@@ -291,6 +332,8 @@ class AttachImages extends Behavior
                     $this->attachImage("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
                 }
             }
+
+            $this->doResetImages = false;
         }
 
         return $this;

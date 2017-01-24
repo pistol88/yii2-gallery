@@ -53,12 +53,13 @@ php yii migrate/up --migrationPath=@vendor/pistol88/yii2-gallery/migrations
             'images' => [
                 'class' => 'pistol88\gallery\behaviors\AttachImages',
                 'mode' => 'gallery',
+                'quality' => 60
             ],
         ];
     }
 ```
 
-*mode - тип загрузки. gallery - массовая загрузка, single - одиночное поле.
+*mode - тип загрузки. gallery - массовая загрузка, single - одиночное поле, quality - качество картинки от 0 - максимальное сжатие, до 100 - без сжатия.
 
 Использование
 ---------------------------------
