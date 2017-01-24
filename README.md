@@ -59,7 +59,7 @@ php yii migrate/up --migrationPath=@vendor/pistol88/yii2-gallery/migrations
     }
 ```
 
-*mode - тип загрузки. gallery - массовая загрузка, single - одиночное поле, quality - качество картинки от 0 - максимальное сжатие, до 100 - без сжатия.
+*mode - тип загрузки. gallery - массовая загрузка, single - одиночное поле, если вам необходимо сжатие то установите quality (0 - 100) где  0 - максимальное сжатие, 100 - минимальное сжатие.
 
 Использование
 ---------------------------------
@@ -100,6 +100,7 @@ previewSize => размер превью загруженных изображе
 label => метка для виджета по умолчанию 'Изображение';
 fileInputPluginLoading => нужно ли показывать индикатор загрузки прогресса в месте ввода, по умолчанию true;
 fileInputPluginOptions => массив свойств виджета [kartik/file/fileInput](http://demos.krajee.com/widget-details/fileinput), по умолчанию [];
+
 
 Не забудьте <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?> для формы.
 

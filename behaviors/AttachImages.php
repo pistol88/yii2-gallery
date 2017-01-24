@@ -23,7 +23,7 @@ class AttachImages extends Behavior
     public $allowExtensions = ['jpg', 'jpeg', 'png', 'gif'];
     public $inputName = 'galleryFiles';
     private $doResetImages = true;
-    public $quality = 60;
+    public $quality = false;
 
     public function init()
     {
@@ -47,20 +47,20 @@ class AttachImages extends Behavior
         ];
     }
 
-    private function resizePhoto($path, $tmp_name){
+    private static function resizePhoto($path, $tmp_name, $quality){
         $type = pathinfo($path, PATHINFO_EXTENSION);
 
         switch($type){
             case 'jpeg':
             case 'jpg': {
                 $source = imagecreatefromjpeg($tmp_name);
-                $result = imagejpeg($source, $path, $this->quality);
+                $result = imagejpeg($source, $path, $quality);
                 break;
             }
             case 'png': {
                 $source = imagecreatefrompng($tmp_name);
                 imagesavealpha($source, true);
-                $quality = (int) (100 - $this->quality) / 10 - 1;
+                $quality = (int) (100 - $quality) / 10 - 1;
                 $result = imagepng($source, $path, $quality);
                 break;
 
@@ -108,8 +108,12 @@ class AttachImages extends Behavior
 
         BaseFileHelper::createDirectory($storePath . DIRECTORY_SEPARATOR . $pictureSubDir, 0775, true);
 
-        $this->resizePhoto($newAbsolutePath, $absolutePath);
-
+        if ( $this->quality !== false){
+            self::resizePhoto($newAbsolutePath, $absolutePath, $this->quality);
+        } else {
+            copy($absolutePath, $newAbsolutePath);
+        }
+        
         if (!file_exists($absolutePath)) {
             throw new \Exception('Cant copy file! ' . $absolutePath . ' to ' . $newAbsolutePath);
         }
@@ -320,7 +324,7 @@ class AttachImages extends Behavior
                     if (!file_exists($this->uploadsPath)){
                         mkdir($this->uploadsPath, 0777, true);
                     }
-
+                    
                     $file->saveAs("{$this->uploadsPath}/{$file->baseName}.{$file->extension}");
 
                     if($this->owner->getGalleryMode() == 'single') {
