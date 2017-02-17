@@ -53,13 +53,14 @@ php yii migrate/up --migrationPath=@vendor/pistol88/yii2-gallery/migrations
             'images' => [
                 'class' => 'pistol88\gallery\behaviors\AttachImages',
                 'mode' => 'gallery',
-                'quality' => 60
+                'quality' => 60,
+                'galleryId' => 'picture'
             ],
         ];
     }
 ```
 
-*mode - тип загрузки. gallery - массовая загрузка, single - одиночное поле, если вам необходимо сжатие то установите quality (0 - 100) где  0 - максимальное сжатие, 100 - минимальное сжатие.
+*mode - тип загрузки. gallery - массовая загрузка, single - одиночное поле, если вам необходимо сжатие то установите quality (0 - 100) где  0 - максимальное сжатие, 100 - минимальное сжатие. galleryId - идентификатор галереи, если у вас возникает конфликт при одинаковых имён класса
 
 Использование
 ---------------------------------

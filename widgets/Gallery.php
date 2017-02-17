@@ -39,7 +39,7 @@ class Gallery extends \yii\base\Widget
 
             }
 
-            return Html::tag('div', $label . $img, $params) . '<br style="clear: both;" />' . $this->getFileInput();
+            return $label . '<br style="clear: both;" />' . Html::tag('div', $img, $params) . '<br style="clear: both;" />' . $this->getFileInput();
         }
 
         if (  $this->model->hasImage() ){

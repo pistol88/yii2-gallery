@@ -24,6 +24,7 @@ class AttachImages extends Behavior
     public $inputName = 'galleryFiles';
     private $doResetImages = true;
     public $quality = false;
+    public $galleryId = null;
 
     public function init()
     {
@@ -128,6 +129,7 @@ class AttachImages extends Behavior
         $image->filePath = $pictureSubDir . '/' . $pictureFileName;
         $image->modelName = $this->getModule()->getShortClass($this->owner);
         $image->urlAlias = $this->getAlias($image);
+        $image->gallery_id = $this->galleryId;
 
         if(!$image->save()){
             return false;
@@ -270,7 +272,8 @@ class AttachImages extends Behavior
     {
         $base = [
             'itemId' => $this->owner->id,
-            'modelName' => $this->getModule()->getShortClass($this->owner)
+            'modelName' => $this->getModule()->getShortClass($this->owner),
+			'gallery_id' => $this->galleryId
         ];
 
         if ($additionWhere) {
