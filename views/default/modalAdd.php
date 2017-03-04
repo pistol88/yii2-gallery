@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textarea(['rows' => 5]) ?>
 
-    <?= $form->field($model, 'sort')->textInput() ?>
+    <?= $form->field($model, 'sort')->textInput('type' => 'number') ?>
     
     <?= Html::hiddenInput('model',$post['model']) ?>
 
