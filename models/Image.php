@@ -246,7 +246,7 @@ class Image extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Титутльник',
+            'title' => 'Титульник',
             'description' => 'Описание',
             'gallery_id' => 'Id галерии',
             'sort' => 'Положение',
