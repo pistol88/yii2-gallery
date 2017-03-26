@@ -103,7 +103,9 @@ fileInputPluginLoading => нужно ли показывать индикато�
 fileInputPluginOptions => массив свойств виджета [kartik/file/fileInput](http://demos.krajee.com/widget-details/fileinput), по умолчанию [];
 
 
-Не забудьте <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?> для формы.
+Не забудьте
+```php<?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>```
+для формы.
 
 ```php
 <?=\pistol88\gallery\widgets\Gallery::widget(
