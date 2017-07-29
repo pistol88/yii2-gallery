@@ -32,8 +32,8 @@ class ImagesController extends Controller
         $size = isset(explode('_', $dirtyAlias)[1]) ? explode('_', $dirtyAlias)[1] : false;
         $alias = isset(explode('_', $dirtyAlias)[0]) ? explode('_', $dirtyAlias)[0] : false;
         $image = $this->getModule()->getImage($item, $alias);
-
         if($image->getExtension() != $dotParts[1]){
+            die(var_dump($image));
             throw new yii\web\HttpException(404, 'Image not found (extenstion)');
         }
 

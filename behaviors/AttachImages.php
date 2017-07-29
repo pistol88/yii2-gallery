@@ -3,7 +3,7 @@ namespace pistol88\gallery\behaviors;
 
 use yii;
 use yii\base\Behavior;
-use yii\db\ActiveRecord;
+use yii\mongodb\ActiveRecord;
 use yii\web\UploadedFile;
 use pistol88\gallery\models;
 use yii\helpers\BaseFileHelper;
@@ -88,7 +88,7 @@ class AttachImages extends Behavior
             }
         }
         
-        if (!$this->owner->id) {
+        if (!$this->owner->_id) {
             throw new \Exception('Owner must have id when you attach image!');
         }
 
@@ -124,13 +124,12 @@ class AttachImages extends Behavior
         }else{
             $image = new ${$this->modelClass}();
         }
-
-        $image->itemId = $this->owner->id;
+        
+        $image->itemId = (string)$this->owner->_id;
         $image->filePath = $pictureSubDir . '/' . $pictureFileName;
         $image->modelName = $this->getModule()->getShortClass($this->owner);
         $image->urlAlias = $this->getAlias($image);
         $image->gallery_id = $this->galleryId;
-
         if(!$image->save()){
             return false;
         }
@@ -152,7 +151,7 @@ class AttachImages extends Behavior
     
     public function setMainImage($img)
     {
-        if ($this->owner->id != $img->itemId) {
+        if ((string)$this->owner->_id != $img->itemId) {
             throw new \Exception('Image must belong to this model');
         }
 
@@ -164,7 +163,7 @@ class AttachImages extends Behavior
         $images = $this->owner->getImages();
 
         foreach ($images as $allImg) {
-            if ($allImg->id == $img->id) {
+            if ($allImg->_id == (string)$img->_id) {
                 continue;
             } else {
                 $counter++;
@@ -197,7 +196,7 @@ class AttachImages extends Behavior
     {
         $finder = $this->getImagesFinder();
         $imageQuery = Image::find()->where($finder);
-        $imageQuery->orderBy(['isMain' => SORT_DESC,'sort' => SORT_DESC, 'id' => SORT_ASC]);
+        $imageQuery->orderBy(['isMain' => SORT_DESC,'sort' => SORT_DESC, '_id' => SORT_ASC]);
         $imageRecords = $imageQuery->all();
         if(!$imageRecords){
             return [$this->getModule()->getPlaceHolder()];
@@ -210,7 +209,7 @@ class AttachImages extends Behavior
     {
         $finder = $this->getImagesFinder();
         $imageQuery = Image::find()->where($finder);
-        $imageQuery->orderBy(['isMain' => SORT_DESC,'sort' => SORT_DESC, 'id' => SORT_ASC]);
+        $imageQuery->orderBy(['isMain' => SORT_DESC,'sort' => SORT_DESC, '_id' => SORT_ASC]);
         $img = $imageQuery->one();
 
         if(!$img){
@@ -271,7 +270,7 @@ class AttachImages extends Behavior
     private function getImagesFinder($additionWhere = false)
     {
         $base = [
-            'itemId' => $this->owner->id,
+            'itemId' => (string)$this->owner->_id,
             'modelName' => $this->getModule()->getShortClass($this->owner),
 			'gallery_id' => $this->galleryId
         ];

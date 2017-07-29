@@ -6,12 +6,65 @@ use yii\base\Exception;
 use yii\helpers\Url;
 use yii\helpers\BaseFileHelper;
 use pistol88\gallery\ModuleTrait;
+use yii\mongodb\ActiveRecord;
 
-class Image extends \yii\db\ActiveRecord
+//class Image extends \yii\db\ActiveRecord
+class Image extends ActiveRecord
 {
     use ModuleTrait;
 
     private $helper = false;
+    
+    public static function collectionName()
+    {
+        return ['mppo', 'image'];
+    }
+    
+    public function attributes()
+    {
+        return [
+            '_id',
+            'title',
+            'alt',
+            'filePath',
+            'itemId',
+            'isMain',
+            'modelName',
+            'urlAlias',
+            'description',
+            'gallery_id',
+            'sort',
+        ];
+    }
+    public function rules()
+    {
+        return [
+            [['filePath', 'itemId', 'modelName', 'urlAlias'], 'required'],
+            [['isMain', 'sort'], 'integer'],
+            [['filePath', 'urlAlias', 'title'], 'string', 'max' => 400],
+            [['title', 'alt'], 'string', 'max' => 255],
+            [['gallery_id', 'modelName'], 'string', 'max' => 150],
+            [['description','itemId', ], 'string'],
+        ];
+    }
+    
+    
+    public function attributeLabels()
+    {
+        return [
+            '_id' => 'ID',
+            'title' => 'Титульник',
+            'description' => 'Описание',
+            'gallery_id' => 'Id галерии',
+            'sort' => 'Положение',
+            'alt' => 'Альтернативный текст',
+            'filePath' => 'File Path',
+            'itemId' => 'Item ID',
+            'isMain' => 'Is Main',
+            'modelName' => 'Model Name',
+            'urlAlias' => 'Url Alias',
+        ];
+    }
 
     public function clearCache(){
         $subDir = $this->getSubDur();
@@ -138,7 +191,6 @@ class Image extends \yii\db\ActiveRecord
         }
 
         $pathToSave = $cachePath.'/'.$subDirPath.'/'.$this->urlAlias.$sizePart.'.'.$fileExtension;
-
         BaseFileHelper::createDirectory(dirname($pathToSave), 0777, true);
         if($sizeString) {
             $size = $this->getModule()->parseSize($sizeString);
@@ -225,37 +277,15 @@ class Image extends \yii\db\ActiveRecord
         return $this->modelName. 's/' . $this->modelName.$this->itemId;
     }
     
-    public static function tableName()
+    /*public static function tableName()
     {
         return 'image';
-    }
+    }*/
     
-    public function rules()
-    {
-        return [
-            [['filePath', 'itemId', 'modelName', 'urlAlias'], 'required'],
-            [['itemId', 'isMain', 'sort'], 'integer'],
-            [['filePath', 'urlAlias', 'title'], 'string', 'max' => 400],
-            [['title', 'alt'], 'string', 'max' => 255],
-            [['gallery_id', 'modelName'], 'string', 'max' => 150],
-            [['description'], 'string'],
-        ];
-    }
+    
+    
 
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'title' => 'Титульник',
-            'description' => 'Описание',
-            'gallery_id' => 'Id галерии',
-            'sort' => 'Положение',
-            'alt' => 'Альтернативный текст',
-            'filePath' => 'File Path',
-            'itemId' => 'Item ID',
-            'isMain' => 'Is Main',
-            'modelName' => 'Model Name',
-            'urlAlias' => 'Url Alias',
-        ];
-    }
+    
+    
+  
 }

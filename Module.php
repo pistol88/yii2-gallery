@@ -22,9 +22,12 @@ class Module extends \yii\base\Module
         $alias = $params['alias'];
         $size = $params['size'];
 
-        $itemId = preg_replace('/[^0-9]+/', '', $item);
+        $itemId = substr($item, -24);
+        $modelName =  substr($item, 0, -24);
+               // die($modelName);
+       /* $itemId = preg_replace('/[^0-9]+/', '', $item);
         $modelName = preg_replace('/[0-9]+/', '', $item);
-
+*/
         $image = Image::find()
             ->where([
                 'modelName' => $modelName,
@@ -54,7 +57,7 @@ class Module extends \yii\base\Module
     public function getModelSubDir($model)
     {
         $modelName = $this->getShortClass($model);
-        $modelDir = $modelName . 's/' . $modelName . $model->id;
+        $modelDir = $modelName . 's/' . $modelName . (string)$model->_id;
 
         return $modelDir;
     }
