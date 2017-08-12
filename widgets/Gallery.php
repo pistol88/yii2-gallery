@@ -69,7 +69,7 @@ class Gallery extends \yii\base\Widget
             $class .= ' main';
         }
 
-        $liParams = $this->getParams($image->id);
+        $liParams = $this->getParams((string)$image->_id);
         $liParams['class'] .=  $class;
 
         return Html::tag('li', $this->getImagePreview($image), $liParams);
@@ -95,7 +95,7 @@ class Gallery extends \yii\base\Widget
         return  [
             'class' => 'pistol88-gallery-item',
             'data-model' => $model::className(),
-            'data-id' => $model->id,
+            'data-id' => (string)$model->_id,
             'data-image' => $id
         ];
     }

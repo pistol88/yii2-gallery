@@ -98,7 +98,7 @@ class DefaultController extends Controller
         $model = $this->findModel(Yii::$app->request->post('model'), Yii::$app->request->post('id'));
         
         foreach ($model->getImages() as $img) {
-            if ($img->id == Yii::$app->request->post('image')) {
+            if ((string)$img->_id == Yii::$app->request->post('image')) {
                  return $arr = ['model' => $model, 'image' => $img];
             }
         }
